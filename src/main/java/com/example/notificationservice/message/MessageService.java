@@ -1,10 +1,12 @@
 package com.example.notificationservice.message;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class MessageService {
 
@@ -18,10 +20,6 @@ public class MessageService {
 
         private final MessageRepository messageRepository;
 
-        @Autowired
-        public MessageService(MessageRepository messageRepository) {
-                this.messageRepository = messageRepository;
-        }
 
         public Integer IngestMessageToDatabase(Message message) {
 
@@ -47,7 +45,8 @@ public class MessageService {
                         message.get().setFailure_comments(failure_comments);
                         messageRepository.save(message.get());
                         return UPDATE_SUCCESSFUL;
-                } else {
+                }
+                else {
                         return MESSAGE_WITH_ID_NOT_FOUND;
                 }
         }

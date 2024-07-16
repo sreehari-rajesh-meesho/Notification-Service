@@ -1,12 +1,18 @@
 package com.example.notificationservice.message;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table
 public class Message {
 
     @Id
@@ -38,60 +44,5 @@ public class Message {
         this.updated_at = updated_at;
     }
 
-    public Integer getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(Integer phone_number) {
-        this.phone_number = phone_number;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getFailure_code() {
-        return failure_code;
-    }
-
-    public void setFailure_code(String failure_code) {
-        this.failure_code = failure_code;
-    }
-
-    public String getFailure_comments() {
-        return failure_comments;
-    }
-
-    public void setFailure_comments(String failure_comments) {
-        this.failure_comments = failure_comments;
-    }
-
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
-
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
-    }
 }
 
