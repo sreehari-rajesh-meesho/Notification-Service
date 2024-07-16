@@ -33,16 +33,5 @@ public class Message {
     private String failure_comments;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-
-    public Message(Integer phone_number, String message, Integer status, String failure_code, String failure_comments, LocalDateTime created_at, LocalDateTime updated_at) {
-        this.phone_number = phone_number;
-        this.message = message;
-        this.status = status;
-        this.failure_code = failure_code;
-        this.failure_comments = failure_comments;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
-
 }
 
