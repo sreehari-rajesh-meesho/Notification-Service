@@ -3,20 +3,17 @@ package com.example.notificationservice.message;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.notificationservice.constants.Constants.*;
 
 import java.util.Optional;
+
+import static com.example.notificationservice.constants.Constants.*;
+
 
 @AllArgsConstructor
 @Service
 public class MessageService {
 
-        // Success Codes
-        private static final int INGESTION_SUCCESSFUL = 0;
-        private static final int UPDATE_SUCCESSFUL = 0;
-
-        // Failure Codes
-        private static final int PHONE_NUMBER_MANDATORY = -1;
-        private static final int MESSAGE_WITH_ID_NOT_FOUND = -2;
 
         private final MessageRepository messageRepository;
 
