@@ -1,9 +1,8 @@
 package com.example.notificationservice.message;
 
+import com.example.notificationservice.kafka.KafkaProducer;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.notificationservice.constants.Constants.*;
 
 import java.util.Optional;
 
@@ -16,7 +15,7 @@ public class MessageService {
 
 
         private final MessageRepository messageRepository;
-
+        private final KafkaProducer kafkaProducer;
 
         public Integer IngestMessageToDatabase(Message message) {
 
@@ -46,5 +45,10 @@ public class MessageService {
                 else {
                         return MESSAGE_WITH_ID_NOT_FOUND;
                 }
+        }
+
+        public Integer PublishMessageToStream(Long message_id) {
+                kafkaProducer.PublishMessageId(SEND_SMS, message_id);
+                return KAFKA_INGESTION_SUCCESSFUL;
         }
 }
