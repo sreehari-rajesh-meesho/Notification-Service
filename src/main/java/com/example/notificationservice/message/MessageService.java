@@ -2,7 +2,6 @@ package com.example.notificationservice.message;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 import static com.example.notificationservice.utils.Constants.*;
@@ -12,9 +11,7 @@ import static com.example.notificationservice.utils.Constants.*;
 @Service
 public class MessageService {
 
-
         private final MessageRepository messageRepository;
-
 
         public Integer IngestMessageToDatabase(Message message) {
 
