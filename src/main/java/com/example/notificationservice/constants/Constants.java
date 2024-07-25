@@ -8,7 +8,11 @@ public class Constants {
 
     // Failure Codes
     public static final int PHONE_NUMBER_MANDATORY = -1;
-    public static final int MESSAGE_WITH_ID_NOT_FOUND = -2;
+    public static final int MESSAGE_WITH_ID_NOT_FOUND = -1;
 
+    public static final int KAFKA_INGESTION_SUCCESSFUL = 0;
+    public static final int KAFKA_INGESTION_FAILED = -1;
+
+    public static final String SEND_SMS = "send-sms";
 
 }
