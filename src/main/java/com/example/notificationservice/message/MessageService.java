@@ -14,9 +14,7 @@ import static com.example.notificationservice.constants.Constants.*;
 @Service
 public class MessageService {
 
-
         private final MessageRepository messageRepository;
-
 
         public Integer IngestMessageToDatabase(Message message) {
 
