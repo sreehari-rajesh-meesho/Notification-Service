@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.example.notificationservice.constants.Constants.*;
+import static com.example.notificationservice.utils.Constants.*;
 
 
 @AllArgsConstructor
@@ -16,17 +16,24 @@ public class MessageService {
 
         public Integer IngestMessageToDatabase(Message message) {
 
-                Integer phoneNumber = message.getPhone_number();
+                Long phoneNumber = message.getPhone_number();
                 String messageText = message.getMessage();
 
                 if(phoneNumber == null || messageText == null) {
                         return PHONE_NUMBER_MANDATORY;
                 }
-
                 Message savedMessage = messageRepository.save(message);
                 Integer messageId = Math.toIntExact(savedMessage.getId());
 
                 return messageId;
+        }
+
+        public Message getMessageById(Long messageId) {
+                Optional<Message> message =messageRepository.findById(messageId);
+                if(message.isPresent()) {
+                        return message.get();
+                }
+                else return null;
         }
 
         public Integer UpdateMessageInDatabase(Long message_id, Integer status, String failure_code, String failure_comments) {
