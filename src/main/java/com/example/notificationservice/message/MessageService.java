@@ -18,21 +18,21 @@ public class MessageService {
         private final MessageRepository messageRepository;
 
 
-        public Integer IngestMessageToDatabase(Message message) {
+        public Long IngestMessageToDatabase(Message message) {
 
                 Integer phoneNumber = message.getPhone_number();
                 String messageText = message.getMessage();
 
-                if(phoneNumber == null || messageText == null) {
+                if(phoneNumber == null) {
                         return PHONE_NUMBER_MANDATORY;
                 }
 
-                messageRepository.save(message);
-
-                return INGESTION_SUCCESSFUL;
+                Message savedMessage = messageRepository.save(message);
+                Long messageId = savedMessage.getId();
+                return messageId;
         }
 
-        public Integer UpdateMessageInDatabase(Long message_id, Integer status, String failure_code, String failure_comments) {
+        public Long UpdateMessageInDatabase(Long message_id, Integer status, String failure_code, String failure_comments) {
 
                 Optional<Message> message = messageRepository.findById(message_id);
 
