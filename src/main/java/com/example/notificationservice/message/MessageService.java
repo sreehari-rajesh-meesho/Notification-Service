@@ -17,7 +17,7 @@ public class MessageService {
 
         public Long IngestMessageToDatabase(Message message) {
 
-                Integer phoneNumber = message.getPhone_number();
+                Long phoneNumber = message.getPhone_number();
                 String messageText = message.getMessage();
 
                 if(phoneNumber == null) {
