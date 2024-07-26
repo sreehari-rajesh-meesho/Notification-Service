@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class KafkaProducer {
 
-    private KafkaTemplate<String, Long> ProducerTemplate;
+    private KafkaTemplate<String, String> ProducerTemplate;
 
-    public void PublishMessageId(String topic, Long value) {
+    public void PublishMessageId(String topic, String value) {
         ProducerTemplate.send(topic, value);
     }
 }
