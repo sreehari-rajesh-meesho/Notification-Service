@@ -9,6 +9,6 @@ public class Constants {
     // Failure Codes
     public static final int PHONE_NUMBER_MANDATORY = -1;
     public static final int MESSAGE_WITH_ID_NOT_FOUND = -2;
-
+    public static final String uri = "https://api.imiconnect.in/resources/v1/messaging";
 
 }
