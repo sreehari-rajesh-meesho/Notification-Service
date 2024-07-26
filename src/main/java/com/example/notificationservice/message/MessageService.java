@@ -3,6 +3,7 @@ package com.example.notificationservice.message;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.example.notificationservice.utils.Constants.*;
@@ -45,6 +46,7 @@ public class MessageService {
                         message.get().setStatus(status);
                         message.get().setFailure_code(failure_code);
                         message.get().setFailure_comments(failure_comments);
+                        message.get().setUpdated_at(LocalDateTime.now());
 
                         Message updatedMessage = messageRepository.save(message.get());
                         Integer messageId = Math.toIntExact(updatedMessage.getId());

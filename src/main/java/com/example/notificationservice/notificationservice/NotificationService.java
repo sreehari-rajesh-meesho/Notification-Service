@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 import static com.example.notificationservice.utils.Constants.*;
 
 
@@ -24,8 +26,9 @@ public class NotificationService {
         private final SendSMSService sendSMSService;
 
         public void IngestionOperation(Message message) {
+                message.setCreated_at(LocalDateTime.now());
                 Integer messageId = messageService.IngestMessageToDatabase(message);
-                kafkaProducer.PublishMessageId("send-sms", messageId.longValue());
+                kafkaProducer.PublishMessageId("send-sms", messageId.toString());
         }
 
         private SendSMSDetails getSendSMSDetails(Message message) {
@@ -42,11 +45,12 @@ public class NotificationService {
         }
 
         @KafkaListener(topics = "send-sms", groupId = "notify-group-id")
-        public Integer RetrievalAndUpdateOperation(Long messageId) {
+        public Integer RetrievalAndUpdateOperation(String messageID) {
 
+                Long messageId = Long.parseLong(messageID);
                 Message message = messageService.getMessageById(messageId);
                 Long phoneNumber = message.getPhone_number();
-                BlackListedNumber blackListedNumber = new BlackListedNumber(phoneNumber.longValue());
+                BlackListedNumber blackListedNumber = new BlackListedNumber(phoneNumber);
                 Boolean isNumberBlackListed = blackListedNumberService.checkIfBlackListedNumber(blackListedNumber);
 
                 if (isNumberBlackListed) {
@@ -55,6 +59,10 @@ public class NotificationService {
 
                 // TODO: Call third party api
                 // TODO: Update the message object
+
+                message.setStatus(404);
+                message.setFailure_code("Internal Server Error");
+                message.setFailure_comments("API call failed");
 
                 messageService.UpdateMessageInDatabase(messageId, message.getStatus(), message.getFailure_code(), message.getFailure_comments());
 

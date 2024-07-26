@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Document(indexName = "message")
 public class SendSMSDetails {
 
