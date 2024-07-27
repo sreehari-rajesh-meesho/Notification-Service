@@ -36,9 +36,9 @@ public class SendSMSDetails {
     private String failure_comments;
 
     @Field(type=FieldType.Date, name="created_at")
-    private LocalDateTime created_at;
+    private String created_at;
 
     @Field(type = FieldType.Date, name = "updated_at")
-    private LocalDateTime updated_at;
+    private String updated_at;
 }
 
