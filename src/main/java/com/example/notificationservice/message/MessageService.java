@@ -19,7 +19,7 @@ public class MessageService {
 
         public Integer IngestMessageToDatabase(Message message) {
 
-                Integer phoneNumber = message.getPhone_number();
+                String phoneNumber = message.getPhone_number();
                 String messageText = message.getMessage();
 
                 if(phoneNumber == null || messageText == null) {
@@ -47,7 +47,7 @@ public class MessageService {
                 }
         }
 
-        public Integer PublishMessageToStream(Long message_id) {
+        public Integer PublishMessageToStream(String message_id) {
                 kafkaProducer.PublishMessageId(SEND_SMS, message_id);
                 return KAFKA_INGESTION_SUCCESSFUL;
         }
