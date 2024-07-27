@@ -26,7 +26,7 @@ public class Message {
             generator = "message_sequence"
     )
     private Long id;
-    private Integer phone_number;
+    private String phone_number;
     private String message;
     private Integer status;
     private String failure_code;

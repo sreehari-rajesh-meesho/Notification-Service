@@ -15,7 +15,7 @@ public class MessageService {
 
         public Integer IngestMessageToDatabase(Message message) {
 
-                Integer phoneNumber = message.getPhone_number();
+                String phoneNumber = message.getPhone_number();
                 String messageText = message.getMessage();
 
                 if(phoneNumber == null || messageText == null) {
