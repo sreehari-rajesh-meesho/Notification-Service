@@ -9,11 +9,11 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.time.LocalDateTime;
 
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Document(indexName = "message")
 public class SendSMSDetails {
@@ -21,13 +21,13 @@ public class SendSMSDetails {
     @Id
     private Long id;
 
-    @Field(type = FieldType.Long, name = "phone_number")
+    @Field(type = FieldType.Keyword, name = "phone_number")
     private Long phone_number;
 
     @Field(type = FieldType.Text, name = "message")
     private String message;
 
-    @Field(type = FieldType.Integer, name = "status")
+    @Field(type = FieldType.Keyword, name = "status")
     private Integer status;
 
     @Field(type = FieldType.Text, name = "failure_code")
@@ -36,10 +36,10 @@ public class SendSMSDetails {
     @Field(type = FieldType.Text, name="failure_comments")
     private String failure_comments;
 
-    @Field(type=FieldType.Date, name="created_at")
-    private LocalDateTime created_at;
+    @Field(type = FieldType.Text, name="created_at")
+    private String created_at;
 
-    @Field(type = FieldType.Date, name = "updated_at")
-    private LocalDateTime updated_at;
+    @Field(type = FieldType.Text, name="updated_at")
+    private String updated_at;
 }
 

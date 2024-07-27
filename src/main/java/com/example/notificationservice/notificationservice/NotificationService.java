@@ -32,15 +32,16 @@ public class NotificationService {
         }
 
         private SendSMSDetails getSendSMSDetails(Message message) {
-            SendSMSDetails sendSMSDetails = new SendSMSDetails();
-            sendSMSDetails.setId(message.getId());
-            sendSMSDetails.setMessage(message.getMessage());
-            sendSMSDetails.setStatus(message.getStatus());
-            sendSMSDetails.setFailure_code(message.getFailure_code());
-            sendSMSDetails.setFailure_comments(message.getFailure_comments());
-            sendSMSDetails.setPhone_number(message.getPhone_number());
-            sendSMSDetails.setCreated_at(message.getCreated_at());
-            sendSMSDetails.setUpdated_at(message.getUpdated_at());
+            SendSMSDetails sendSMSDetails = new SendSMSDetails(
+                    message.getId(),
+                    message.getPhone_number(),
+                    message.getMessage(),
+                    message.getStatus(),
+                    message.getFailure_code(),
+                    message.getFailure_comments(),
+                    message.getCreated_at().toString(),
+                    message.getUpdated_at().toString()
+            );
             return sendSMSDetails;
         }
 
@@ -65,6 +66,7 @@ public class NotificationService {
                 message.setFailure_comments("API call failed");
 
                 messageService.UpdateMessageInDatabase(messageId, message.getStatus(), message.getFailure_code(), message.getFailure_comments());
+                message.setUpdated_at(LocalDateTime.now());
 
                 SendSMSDetails sendSMSDetails = getSendSMSDetails(message);
                 sendSMSService.saveMessage(sendSMSDetails);
@@ -72,5 +74,8 @@ public class NotificationService {
                 return SUCCESS;
         }
 
+        public Iterable<SendSMSDetails> sendSMSDetails() {
+                return sendSMSService.findAll();
+        }
 
 }

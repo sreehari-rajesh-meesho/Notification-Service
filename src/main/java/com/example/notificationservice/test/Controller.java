@@ -1,12 +1,10 @@
 package com.example.notificationservice.test;
 
+import com.example.notificationservice.elasticsearch.SendSMSDetails;
 import com.example.notificationservice.message.Message;
 import com.example.notificationservice.notificationservice.NotificationService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/sms")
@@ -26,4 +24,8 @@ public class Controller {
             notificationService.IngestionOperation(message);
     }
 
+    @GetMapping(path= "get")
+    public Iterable<SendSMSDetails> getSMS() {
+            return notificationService.sendSMSDetails();
+    }
 }
