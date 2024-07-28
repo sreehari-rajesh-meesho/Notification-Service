@@ -21,7 +21,7 @@ public class SendSMSDetails {
     private Long id;
 
     @Field(type = FieldType.Long, name = "phone_number")
-    private Long phone_number;
+    private String phone_number;
 
     @Field(type = FieldType.Text, name = "message")
     private String message;
