@@ -11,4 +11,6 @@ public class Constants {
     public static final long PHONE_NUMBER_MANDATORY = -2;
     public static final long MESSAGE_WITH_ID_NOT_FOUND = -3;
 
+    public static final long NUMBER_BLACKLISTED = -4;
+
 }

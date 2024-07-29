@@ -36,6 +36,10 @@ public class MessageService {
                 }
         }
 
+        public Optional<Message> findMessageById(Long message_id) {
+                return messageRepository.findById(message_id);
+        }
+
         public Long UpdateMessageInDatabase(Long message_id, Integer status, String failure_code, String failure_comments) {
 
                 try {

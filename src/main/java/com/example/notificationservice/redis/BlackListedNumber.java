@@ -15,6 +15,6 @@ import java.io.Serializable;
 @RedisHash("BlackListedNumber")
 public class BlackListedNumber implements Serializable {
     @Id
-    private Long phoneNumber;
+    private String phoneNumber;
 }
 
