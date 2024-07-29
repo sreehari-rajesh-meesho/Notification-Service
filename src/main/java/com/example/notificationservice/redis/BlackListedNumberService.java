@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class BlackListedNumberService {
 
     public List<BlackListedNumber> getAllBlackListedNumbers() {
 
-         List<BlackListedNumber> blackListedNumberList = new ArrayList<>();
+        List<BlackListedNumber> blackListedNumberList = new ArrayList<>();
 
         for (BlackListedNumber blackListedNumber : blackListedNumberRepository.findAll())
             blackListedNumberList.add(blackListedNumber);
