@@ -9,4 +9,6 @@ import lombok.*;
 @ToString
 public class FailureResponse<T> {
     private T error;
+
+
 }

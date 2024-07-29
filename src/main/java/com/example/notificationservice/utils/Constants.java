@@ -1,4 +1,4 @@
-package com.example.notificationservice.constants;
+package com.example.notificationservice.utils;
 
 public class Constants {
 
@@ -10,7 +10,10 @@ public class Constants {
     // Failure Codes
     public static final long PHONE_NUMBER_MANDATORY = -2;
     public static final long MESSAGE_WITH_ID_NOT_FOUND = -3;
+    public static final long INVALID_REQUEST = -5;
 
     public static final long NUMBER_BLACKLISTED = -4;
 
+    public static final long BLACKLISTED_SUCCESSFULLY = 0;
+    public static final long WHITELISTED_SUCCESSFULLY = 1;
 }

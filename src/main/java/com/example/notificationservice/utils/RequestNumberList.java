@@ -1,4 +1,4 @@
-package com.example.notificationservice.redis;
+package com.example.notificationservice.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

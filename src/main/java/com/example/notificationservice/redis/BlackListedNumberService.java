@@ -1,6 +1,7 @@
 package com.example.notificationservice.redis;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
 @AllArgsConstructor
 public class BlackListedNumberService {
 

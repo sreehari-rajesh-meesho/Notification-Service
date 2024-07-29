@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.example.notificationservice.constants.Constants.*;
+import static com.example.notificationservice.utils.Constants.*;
 
 
 @AllArgsConstructor
