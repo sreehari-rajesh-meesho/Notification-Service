@@ -81,7 +81,7 @@ public class NotificationService {
                             JsonObject responseBody = jsonObject.get("response").asJsonObject();
 
                             String failure_code = responseBody.get("code").toString();
-                            String failure_message = responseBody.get("message").toString();
+                            String failure_message = responseBody.get("description").toString();
 
                             messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
