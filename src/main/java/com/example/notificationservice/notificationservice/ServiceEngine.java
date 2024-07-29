@@ -6,7 +6,6 @@ import com.example.notificationservice.utils.RequestNumberList;
 import com.example.notificationservice.utils.*;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
-import org.apache.kafka.common.network.Send;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 

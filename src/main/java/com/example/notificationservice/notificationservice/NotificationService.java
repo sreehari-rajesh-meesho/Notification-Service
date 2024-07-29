@@ -7,15 +7,17 @@ import com.example.notificationservice.message.Message;
 import com.example.notificationservice.message.MessageService;
 import com.example.notificationservice.redis.BlackListedNumber;
 import com.example.notificationservice.redis.BlackListedNumberService;
+import com.example.notificationservice.thirdparty.ThirdPartyService;
 import com.example.notificationservice.utils.RequestNumberList;
+import com.google.gson.Gson;
+import jakarta.json.JsonObject;
 import lombok.AllArgsConstructor;
 
-import org.apache.kafka.common.network.Send;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class NotificationService {
         private MessageService messageService;
         private BlackListedNumberService blackListedNumberService;
         private KafkaProducer kafkaProducer;
+        private ThirdPartyService thirdPartyService;
 
         public Long MessageIngestionPhase(Message message) {
 
@@ -69,12 +72,18 @@ public class NotificationService {
                             messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
                     } else {
-                            // Call third party API
-                            Integer mockStatus = 404;
-                            String mockFailureCode = "Internal Server Error";
-                            String mockFailureComments = "Hello World";
+                            ResponseEntity<String> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
                             // Update the details in the database;
-                            messageService.UpdateMessageInDatabase(messageId, mockStatus, mockFailureCode, mockFailureComments);
+
+                            Integer status = response.getStatusCode().value();
+
+                            JsonObject jsonObject = new Gson().fromJson(response.getBody(), JsonObject.class);
+                            JsonObject responseBody = jsonObject.get("response").asJsonObject();
+
+                            String failure_code = responseBody.get("code").toString();
+                            String failure_message = responseBody.get("message").toString();
+
+                            messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
 
                     }
