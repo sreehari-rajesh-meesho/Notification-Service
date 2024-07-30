@@ -7,12 +7,16 @@ import com.example.notificationservice.message.Message;
 import com.example.notificationservice.message.MessageService;
 import com.example.notificationservice.redis.BlackListedNumber;
 import com.example.notificationservice.redis.BlackListedNumberService;
+import com.example.notificationservice.thirdparty.ThirdPartyResponse;
+import com.example.notificationservice.thirdparty.ThirdPartyResponseBody;
 import com.example.notificationservice.thirdparty.ThirdPartyService;
 import com.example.notificationservice.utils.RequestNumberList;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.google.gson.Gson;
 import jakarta.json.JsonObject;
 import lombok.AllArgsConstructor;
 
+import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -55,8 +59,10 @@ public class NotificationService {
         public void MessageSendAndUpdatePhase(String KafkaMessageId) {
 
                 Long messageId = Long.parseLong(KafkaMessageId);
-
+                Long UpdatedMessageId = -1L;
                 Optional<Message> message = messageService.findMessageById(messageId);
+
+                System.out.println("MessageID:"+ messageId);
 
                 if(message.isPresent()) {
 
@@ -64,37 +70,35 @@ public class NotificationService {
                     String messageText = message.get().getMessage();
 
                     if(blackListedNumberService.checkIfBlackListedNumber(new BlackListedNumber(phoneNumber))) {
-
+                            System.out.println("Phone number is blacklisted");
                             Integer status = Math.toIntExact(NUMBER_BLACKLISTED);
                             String failure_code = "NUMBER_BLACKLISTED";
                             String failure_message = "The Number is BlackListed";
 
-                            messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
                     } else {
-                            ResponseEntity<String> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
+                            System.out.println("Phone number is not blacklisted");
+                            ResponseEntity<ThirdPartyResponseBody> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
                             // Update the details in the database;
 
-                            Integer status = response.getStatusCode().value();
+                            int status = response.getStatusCode().value();
 
-                            JsonObject jsonObject = new Gson().fromJson(response.getBody(), JsonObject.class);
-                            JsonObject responseBody = jsonObject.get("response").asJsonObject();
+                            ThirdPartyResponseBody thirdPartyResponseBody = response.getBody();
+                            String failure_code = thirdPartyResponseBody.getResponse().getCode();
+                            String failure_message = thirdPartyResponseBody.getResponse().getDescription();
 
-                            String failure_code = responseBody.get("code").toString();
-                            String failure_message = responseBody.get("description").toString();
-
-                            messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
-
-
+                            UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                     }
                 } else {
                         Integer status = Math.toIntExact(MESSAGE_WITH_ID_NOT_FOUND);
                         String failure_code = "MESSAGE_NOT_FOUND";
                         String failure_message = "Message with ID" + messageId + " not found";
-                        messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                        UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                 }
 
-                Optional<Message> updatedMessage = messageService.findMessageById(messageId);
+                System.out.println("UpdatedMessageID:" + UpdatedMessageId);
+                Optional<Message> updatedMessage = messageService.findMessageById(UpdatedMessageId);
 
                 if(updatedMessage.isPresent()) {
                         // Ingest the details in elastic search

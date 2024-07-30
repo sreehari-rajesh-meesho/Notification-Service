@@ -52,9 +52,9 @@ public class MessageService {
                                 message.get().setFailure_comments(failure_comments);
                                 message.get().setUpdated_at(LocalDateTime.now());
 
-                                messageRepository.save(message.get());
+                                Long updatedMessageId = messageRepository.save(message.get()).getId();
 
-                                return UPDATE_SUCCESSFUL;
+                                return updatedMessageId;
                         }
                         else {
                                 return MESSAGE_WITH_ID_NOT_FOUND;
