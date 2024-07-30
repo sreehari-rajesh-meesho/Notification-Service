@@ -44,7 +44,7 @@ public class SendSMSService {
 
     public Page<SendSMSDetails> findSMSContainingText(String text, int page, int size) {
             PageRequest pageable = PageRequest.of(page, size);
-            return sendSMSDetailsRepository.findByMessageContaining(text, pageable);
+            return sendSMSDetailsRepository.findSendSMSDetailsByMessageIsContaining(text, pageable);
     }
 
     public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {
@@ -54,6 +54,6 @@ public class SendSMSService {
             Long start = startTime.toInstant(ZoneOffset.UTC).toEpochMilli();
             Long end = endTime.toInstant(ZoneOffset.UTC).toEpochMilli();
 
-            return sendSMSDetailsRepository.findByCreatedBetween(start, end, pageable);
+            return sendSMSDetailsRepository.findSendSMSDetailsByCreatedBetween(start, end, pageable);
     }
 }

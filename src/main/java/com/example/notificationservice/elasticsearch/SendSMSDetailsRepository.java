@@ -1,5 +1,6 @@
 package com.example.notificationservice.elasticsearch;
 
+import org.apache.kafka.common.network.Send;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -10,6 +11,6 @@ import java.time.LocalDateTime;
 @Repository
 public interface SendSMSDetailsRepository extends ElasticsearchRepository<SendSMSDetails, String> {
         Page<SendSMSDetails> findAll(Pageable pageable);
-        Page<SendSMSDetails> findByMessageContaining(String text, Pageable pageable);
-        Page<SendSMSDetails> findByCreatedBetween(Long start, Long end, Pageable pageable);
+        Page<SendSMSDetails> findSendSMSDetailsByCreatedBetween(Long start, Long end, Pageable pageable);
+        Page<SendSMSDetails> findSendSMSDetailsByMessageIsContaining(String text, Pageable pageable);
 }
