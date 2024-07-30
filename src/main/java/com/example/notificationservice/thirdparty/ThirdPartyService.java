@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ThirdPartyService {
 
-        public ResponseEntity<String> sendSMS(Long messageId, String phoneNumber, String message) {
+        public ResponseEntity<ThirdPartyResponseBody> sendSMS(Long messageId, String phoneNumber, String message) {
 
                 SMSObject smsObject = new SMSObject(message);
                 Channel channel = new Channel(smsObject);
@@ -44,7 +44,7 @@ public class ThirdPartyService {
 
                 System.out.println(request);
 
-                ResponseEntity<String> response= restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                ResponseEntity<ThirdPartyResponseBody> response= restTemplate.exchange(url, HttpMethod.POST, request, ThirdPartyResponseBody.class);
 
                 return response;
 
