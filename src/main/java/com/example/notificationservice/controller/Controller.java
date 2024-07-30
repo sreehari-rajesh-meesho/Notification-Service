@@ -6,6 +6,11 @@ import com.example.notificationservice.message.Message;
 import com.example.notificationservice.notificationservice.NotificationService;
 import com.example.notificationservice.utils.RequestNumberList;
 import com.example.notificationservice.utils.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -84,12 +89,23 @@ public class Controller {
 
     @GetMapping(path = "sms/{request_id}")
     public String getSMSById(@PathVariable("request_id") Long requestId) {
+
         SuccessResponse<Message> successResponse = new SuccessResponse<>();
         Optional<Message> msgById = notificationService.getMessageById(requestId);
 
         if(msgById.isPresent()) {
             successResponse.setData(msgById.get());
-            return new Gson().toJson(successResponse);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+
+            try {
+                String response = mapper.writeValueAsString(successResponse);
+                return response;
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return new Gson().toJson(getResponseErrorObjectFailureResponse(DATABASE_ERROR));
+            }
         }
 
         return new Gson().toJson(getResponseErrorObjectFailureResponse(INVALID_REQUEST));
