@@ -2,7 +2,6 @@ package com.example.notificationservice.elasticsearch;
 
 import com.example.notificationservice.message.Message;
 import lombok.AllArgsConstructor;
-import org.apache.kafka.common.network.Send;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
