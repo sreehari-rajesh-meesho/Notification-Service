@@ -27,7 +27,6 @@ public class ThirdPartyService {
                                 List.of(destinationObject)
                 );
 
-
                 String url = "https://api.imiconnect.in/resources/v1/messaging";
 
                 RestTemplate restTemplate = new RestTemplate();
@@ -40,11 +39,7 @@ public class ThirdPartyService {
 
                 HttpEntity<ThirdPartyRequest> request = new HttpEntity<>(thirdPartyRequest, headers);
 
-                System.out.println(request);
-
                 ResponseEntity<ThirdPartyResponseBody> response= restTemplate.exchange(url, HttpMethod.POST, request, ThirdPartyResponseBody.class);
-
-                System.out.println(response);
 
                 return response;
 

@@ -65,26 +65,19 @@ public class ServiceEngine {
         public String BlackListNumbers(RequestNumberList requestNumberList) {
 
             Long status = notificationService.BlackListNumbers(requestNumberList);
+            SuccessResponse<String> successResponse = new SuccessResponse<>();
+            successResponse.setData("Successfully Blacklisted");
+            return new Gson().toJson(successResponse);
 
-            if(status == BLACKLISTED_SUCCESSFULLY) {
-                    SuccessResponse<String> successResponse = new SuccessResponse<>();
-                    successResponse.setData("Successfully Blacklisted");
-                    return new Gson().toJson(successResponse);
-            } else {
-                 return "Error";
-            }
         }
 
         public String WhiteListNumbers(RequestNumberList requestNumberList) {
 
             Long status = notificationService.WhiteListNumbers(requestNumberList);
-            if(status == WHITELISTED_SUCCESSFULLY) {
-                    SuccessResponse<String> successResponse = new SuccessResponse<>();
-                    successResponse.setData("Successfully Whitelisted");
-                    return new Gson().toJson(successResponse);
-            }   else {
-                return "Error";
-            }
+            SuccessResponse<String> successResponse = new SuccessResponse<>();
+            successResponse.setData("Successfully Whitelisted");
+            return new Gson().toJson(successResponse);
+
         }
 
         public String GetSMSDetails(Long messageId) {
