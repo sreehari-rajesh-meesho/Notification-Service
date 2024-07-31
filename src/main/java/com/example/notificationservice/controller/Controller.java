@@ -6,12 +6,7 @@ import com.example.notificationservice.message.Message;
 import com.example.notificationservice.notificationservice.NotificationService;
 import com.example.notificationservice.utils.RequestNumberList;
 import com.example.notificationservice.utils.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -29,41 +24,38 @@ public class Controller {
 
     private NotificationService notificationService;
 
-    private static FailureResponse<ResponseErrorObject> getResponseErrorObjectFailureResponse(Long status) {
+    private static ResponseErrorObject getResponseErrorObjectFailureResponse(Long status) {
 
-        FailureResponse<ResponseErrorObject> failureResponse = new FailureResponse<>();
+        ResponseErrorObject error = null;
 
         if(status == INVALID_REQUEST) {
-            ResponseErrorObject error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
-            failureResponse.setError(error);
+            error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
         }
         else if(status == DATABASE_ERROR) {
-            ResponseErrorObject error = new ResponseErrorObject("REQUEST_FAILED", "Database Error");
-            failureResponse.setError(error);
+            error = new ResponseErrorObject("REQUEST_FAILED", "Database Error");
         }
         else if(status == MESSAGE_WITH_ID_NOT_FOUND) {
-            ResponseErrorObject error = new ResponseErrorObject("REQUEST_FAILED", "Message With Id Not Found");
-            failureResponse.setError(error);
+            error = new ResponseErrorObject("REQUEST_FAILED", "Message With Id Not Found");
         }
 
-        return failureResponse;
+        return error;
     }
 
     @PostMapping(path = "sms/send")
     public Response<ResponseDataObject, ResponseErrorObject> sendSMS(@RequestBody SMSRequest smsRequest) {
 
-            Message message = new Message();
-            message.setPhone_number(smsRequest.getPhoneNumber());
-            message.setMessage(smsRequest.getMessage());
-            Long messageId = notificationService.MessageIngestionPhase(message);
-            Response<ResponseDataObject, ResponseErrorObject> response = new Response<>();
+        Message message = new Message();
+        message.setPhone_number(smsRequest.getPhoneNumber());
+        message.setMessage(smsRequest.getMessage());
+        Long messageId = notificationService.MessageIngestionPhase(message);
+        Response<ResponseDataObject, ResponseErrorObject> response = new Response<>();
 
-            if(messageId < 0) {
-                 response.setError(getResponseErrorObjectFailureResponse(messageId).getError());
-            }
-            ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
-            response.setData(data);
-            return response;
+        if(messageId < 0) {
+            response.setError(getResponseErrorObjectFailureResponse(messageId));
+        }
+        ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
+        response.setData(data);
+        return response;
     }
 
     @PostMapping(path = "blacklist")
@@ -93,7 +85,7 @@ public class Controller {
             return response;
         }
 
-        ResponseErrorObject errorObject = getResponseErrorObjectFailureResponse(INVALID_REQUEST).getError();
+        ResponseErrorObject errorObject = getResponseErrorObjectFailureResponse(INVALID_REQUEST);
         response.setError(errorObject);
         return response;
     }
