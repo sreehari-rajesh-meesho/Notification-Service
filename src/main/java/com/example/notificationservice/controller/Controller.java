@@ -50,65 +50,52 @@ public class Controller {
     }
 
     @PostMapping(path = "sms/send")
-    public String sendSMS(@RequestBody SMSRequest smsRequest) {
+    public Response<ResponseDataObject, ResponseErrorObject> sendSMS(@RequestBody SMSRequest smsRequest) {
 
             Message message = new Message();
-
             message.setPhone_number(smsRequest.getPhoneNumber());
             message.setMessage(smsRequest.getMessage());
-
             Long messageId = notificationService.MessageIngestionPhase(message);
+            Response<ResponseDataObject, ResponseErrorObject> response = new Response<>();
 
             if(messageId < 0) {
-                FailureResponse<ResponseErrorObject> failureResponse = getResponseErrorObjectFailureResponse(messageId);
-                return new Gson().toJson(failureResponse);
+                 response.setError(getResponseErrorObjectFailureResponse(messageId).getError());
             }
-
-            SuccessResponse<ResponseDataObject> successResponse = new SuccessResponse<>();
             ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
-            successResponse.setData(data);
-
-            return new Gson().toJson(successResponse);
+            response.setData(data);
+            return response;
     }
 
     @PostMapping(path = "blacklist")
-    public String blackListNumber(@RequestBody RequestNumberList phoneNumbers) {
+    public Response<String, String> blackListNumber(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.BlackListNumbers(phoneNumbers);
-        SuccessResponse<String> successResponse = new SuccessResponse<>();
+        Response<String, String> successResponse = new Response<>();
         successResponse.setData("Successfully Blacklisted");
-        return new Gson().toJson(successResponse);
+        return successResponse;
     }
 
     @DeleteMapping(path = "blacklist")
-    public String deleteFromBlackList(@RequestBody RequestNumberList phoneNumbers) {
+    public Response<String, String> deleteFromBlackList(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.WhiteListNumbers(phoneNumbers);
-        SuccessResponse<String> successResponse = new SuccessResponse<>();
+        Response<String, String> successResponse = new Response<>();
         successResponse.setData("Successfully Whitelisted");
-        return new Gson().toJson(successResponse);
+        return successResponse;
     }
 
     @GetMapping(path = "sms/{request_id}")
-    public String getSMSById(@PathVariable("request_id") Long requestId) {
+    public Response<Message, ResponseErrorObject> getSMSById(@PathVariable("request_id") Long requestId) {
 
-        SuccessResponse<Message> successResponse = new SuccessResponse<>();
+        Response<Message, ResponseErrorObject> response = new Response<>();
         Optional<Message> msgById = notificationService.getMessageById(requestId);
 
         if(msgById.isPresent()) {
-            successResponse.setData(msgById.get());
-
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-
-            try {
-                String response = mapper.writeValueAsString(successResponse);
-                return response;
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return new Gson().toJson(getResponseErrorObjectFailureResponse(DATABASE_ERROR));
-            }
+            response.setData(msgById.get());
+            return response;
         }
 
-        return new Gson().toJson(getResponseErrorObjectFailureResponse(INVALID_REQUEST));
+        ResponseErrorObject errorObject = getResponseErrorObjectFailureResponse(INVALID_REQUEST).getError();
+        response.setError(errorObject);
+        return response;
     }
 
     @GetMapping(path = "contains/{page}/{size}")
