@@ -1,5 +1,6 @@
 package com.example.notificationservice.notificationservice;
 
+import com.example.notificationservice.NotificationServiceApplication;
 import com.example.notificationservice.elasticsearch.SendSMSDetails;
 import com.example.notificationservice.elasticsearch.SendSMSService;
 import com.example.notificationservice.kafka.KafkaProducer;
@@ -16,6 +17,8 @@ import com.google.gson.Gson;
 import jakarta.json.JsonObject;
 import lombok.AllArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,18 +40,23 @@ public class NotificationService {
         private BlackListedNumberService blackListedNumberService;
         private KafkaProducer kafkaProducer;
         private ThirdPartyService thirdPartyService;
+        private static final Logger LOG = LogManager.getLogger(NotificationService.class);
 
         public Long MessageIngestionPhase(Message message) {
 
                 Long messageId = messageService.IngestMessageToDatabase(message);
 
                 if(messageId == PHONE_NUMBER_MANDATORY) {
+                    LOG.error("Phone Number Mandatory");
                     return PHONE_NUMBER_MANDATORY;
                 }
 
                 if(messageId == DATABASE_ERROR) {
+                    LOG.error("Database error");
                     return DATABASE_ERROR;
                 }
+
+                LOG.info("Message with message Id:" + messageId + " Ingested Successfully");
 
                 kafkaProducer.PublishMessageId("send-sms", messageId.toString());
 
@@ -62,23 +70,25 @@ public class NotificationService {
                 Long UpdatedMessageId = -1L;
                 Optional<Message> message = messageService.findMessageById(messageId);
 
-                System.out.println("MessageID:"+ messageId);
-
                 if(message.isPresent()) {
 
                     String phoneNumber = message.get().getPhone_number();
                     String messageText = message.get().getMessage();
 
                     if(blackListedNumberService.checkIfBlackListedNumber(new BlackListedNumber(phoneNumber))) {
-                            System.out.println("Phone number is blacklisted");
+
+                            LOG.info("Phone Number Blacklisted and in Redis Cache");
+
                             Integer status = Math.toIntExact(NUMBER_BLACKLISTED);
                             String failure_code = "NUMBER_BLACKLISTED";
                             String failure_message = "The Number is BlackListed";
 
+                            LOG.info("Updated the BlackListed SMS in DB");
+
                             UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
                     } else {
-                            System.out.println("Phone number is not blacklisted");
+
                             ResponseEntity<ThirdPartyResponseBody> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
                             // Update the details in the database;
 
@@ -87,6 +97,8 @@ public class NotificationService {
                             ThirdPartyResponseBody thirdPartyResponseBody = response.getBody();
                             String failure_code = thirdPartyResponseBody.getResponse().getCode();
                             String failure_message = thirdPartyResponseBody.getResponse().getDescription();
+
+                            LOG.info("Updated the SMS Status in DB");
 
                             UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                     }
@@ -97,13 +109,12 @@ public class NotificationService {
                         UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                 }
 
-                System.out.println("UpdatedMessageID:" + UpdatedMessageId);
                 Optional<Message> updatedMessage = messageService.findMessageById(UpdatedMessageId);
 
                 if(updatedMessage.isPresent()) {
                         // Ingest the details in elastic search
+                        LOG.info("Indexed the details in elastic search");
                         sendSMSService.saveMessage(updatedMessage.get());
-                        System.out.println("Indexed Details in elastic search");
                 }
         }
 
