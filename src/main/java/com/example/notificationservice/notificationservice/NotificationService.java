@@ -7,16 +7,11 @@ import com.example.notificationservice.message.Message;
 import com.example.notificationservice.message.MessageService;
 import com.example.notificationservice.redis.BlackListedNumber;
 import com.example.notificationservice.redis.BlackListedNumberService;
-import com.example.notificationservice.thirdparty.ThirdPartyResponse;
 import com.example.notificationservice.thirdparty.ThirdPartyResponseBody;
 import com.example.notificationservice.thirdparty.ThirdPartyService;
 import com.example.notificationservice.utils.RequestNumberList;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.google.gson.Gson;
-import jakarta.json.JsonObject;
 import lombok.AllArgsConstructor;
 
-import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -75,10 +70,9 @@ public class NotificationService {
                             String failure_code = "NUMBER_BLACKLISTED";
                             String failure_message = "The Number is BlackListed";
 
-                            UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
                     } else {
-                            System.out.println("Phone number is not blacklisted");
                             ResponseEntity<ThirdPartyResponseBody> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
                             // Update the details in the database;
 

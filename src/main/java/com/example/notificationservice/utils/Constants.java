@@ -16,4 +16,7 @@ public class Constants {
 
     public static final long BLACKLISTED_SUCCESSFULLY = 0;
     public static final long WHITELISTED_SUCCESSFULLY = 1;
+    public static final String API_URL = "https://api.imiconnect.in/resources/v1/messaging";
+    public static final String API_KEY = "c0c49ebf-ca44-11e9-9e4e-025282c394f2";
+
 }

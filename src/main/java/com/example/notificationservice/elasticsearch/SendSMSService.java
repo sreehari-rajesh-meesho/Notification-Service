@@ -15,30 +15,22 @@ public class SendSMSService {
 
     private final SendSMSDetailsRepository sendSMSDetailsRepository;
 
-    public Iterable<SendSMSDetails> findAll() {
-        return sendSMSDetailsRepository.findAll();
-    }
-
     public Page<SendSMSDetails> findByPage(int page, int size) {
             PageRequest pageable = PageRequest.of(page, size);
-            Page<SendSMSDetails> sendSMSDetails = sendSMSDetailsRepository.findAll(pageable);
-            return sendSMSDetails;
+            return sendSMSDetailsRepository.findAll(pageable);
     }
 
     public void saveMessage(Message message) {
 
         SendSMSDetails sendSMSDetails = new SendSMSDetails();
-
         sendSMSDetails.setPhone_number(message.getPhone_number());
         sendSMSDetails.setMessage(message.getMessage());
         sendSMSDetails.setStatus(message.getStatus());
         sendSMSDetails.setFailure_code(message.getFailure_code());
         sendSMSDetails.setFailure_comments(message.getFailure_comments());
-        sendSMSDetails.setCreated(message.getCreated_at().toInstant(ZoneOffset.UTC).toEpochMilli());
-        sendSMSDetails.setUpdated(message.getUpdated_at().toInstant(ZoneOffset.UTC).toEpochMilli());
-
+        sendSMSDetails.setCreated(message.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli());
+        sendSMSDetails.setUpdated(message.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli());
         sendSMSDetailsRepository.save(sendSMSDetails);
-
     }
 
     public Page<SendSMSDetails> findSMSContainingText(String text, int page, int size) {
@@ -49,10 +41,8 @@ public class SendSMSService {
     public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {
 
             PageRequest pageable = PageRequest.of(page, size);
-
             Long start = startTime.toInstant(ZoneOffset.UTC).toEpochMilli();
             Long end = endTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-
             return sendSMSDetailsRepository.findSendSMSDetailsByCreatedBetween(start, end, pageable);
     }
 }
