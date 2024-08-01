@@ -33,15 +33,15 @@ public class PhoneNumberValidation {
             return INVALID_REQUEST;
         }
 
-        if(phoneNumber.charAt(1) != '1') {
+        if(phoneNumber.charAt(2) != '1') {
             return INVALID_REQUEST;
         }
 
-        if(!(phoneNumber.charAt(2) >= '6' && phoneNumber.charAt(2) <= '9')) {
+        if(!(phoneNumber.charAt(3) >= '6' && phoneNumber.charAt(3) <= '9')) {
             return INVALID_REQUEST;
         }
 
-        for(int i = 3; i < phoneNumber.length(); i++) {
+        for(int i = 4; i < phoneNumber.length(); i++) {
             if(!(phoneNumber.charAt(i)>='0' && phoneNumber.charAt(i)<='9')) {
                 return INVALID_REQUEST;
             }

@@ -49,11 +49,13 @@ public class Controller {
         Message message = new Message();
         message.setPhone_number(smsRequest.getPhoneNumber());
         message.setMessage(smsRequest.getMessage());
+
         Long messageId = notificationService.MessageIngestionPhase(message);
         Response<ResponseDataObject, ResponseErrorObject> response = new Response<>();
 
         if(messageId < 0) {
             response.setError(getResponseErrorObjectFailureResponse(messageId));
+            return response;
         }
 
         ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
