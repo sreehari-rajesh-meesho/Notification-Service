@@ -1,12 +1,13 @@
 package com.example.notificationservice.controller;
 
-
 import com.example.notificationservice.elasticsearch.SendSMSDetails;
 import com.example.notificationservice.message.Message;
 import com.example.notificationservice.notificationservice.NotificationService;
 import com.example.notificationservice.utils.RequestNumberList;
 import com.example.notificationservice.utils.*;
 
+import com.meesho.instrumentation.annotation.DigestLogger;
+import com.meesho.instrumentation.enums.MetricType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class Controller {
         return error;
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/sms/send")
     @PostMapping(path = "sms/send")
     public Response<ResponseDataObject, ResponseErrorObject> sendSMS(@RequestBody SMSRequest smsRequest) {
 
@@ -53,11 +55,14 @@ public class Controller {
         if(messageId < 0) {
             response.setError(getResponseErrorObjectFailureResponse(messageId));
         }
+
         ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
         response.setData(data);
         return response;
     }
 
+
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/blacklist")
     @PostMapping(path = "blacklist")
     public Response<String, String> blackListNumber(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.BlackListNumbers(phoneNumbers);
@@ -66,6 +71,7 @@ public class Controller {
         return successResponse;
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/blacklist")
     @DeleteMapping(path = "blacklist")
     public Response<String, String> deleteFromBlackList(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.WhiteListNumbers(phoneNumbers);
@@ -74,6 +80,7 @@ public class Controller {
         return successResponse;
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/sms")
     @GetMapping(path = "sms/{request_id}")
     public Response<Message, ResponseErrorObject> getSMSById(@PathVariable("request_id") Long requestId) {
 
@@ -90,16 +97,19 @@ public class Controller {
         return response;
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/contains")
     @GetMapping(path = "contains/{page}/{size}")
     public Page<SendSMSDetails> getSMSDetailsContaining(@PathVariable Integer page, @PathVariable Integer size, @RequestParam String text) {
         return notificationService.getSendSMSDetailsContainingText(page, size, text);
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/between")
     @GetMapping(path = "between/{page}/{size}")
     public Page<SendSMSDetails> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
         return notificationService.getSendSMSDetailsBetween(page, size, from, to);
     }
 
+    @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/all")
     @GetMapping(path = "all/{page}/{size}")
     public Page<SendSMSDetails> getAllSMSDetails(@PathVariable int page, @PathVariable int size) {
         return notificationService.getAllSMSDetails(page, size);

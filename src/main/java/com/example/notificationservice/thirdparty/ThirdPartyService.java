@@ -1,17 +1,25 @@
 package com.example.notificationservice.thirdparty;
 
+import com.meesho.instrumentation.annotation.DigestLogger;
+import com.meesho.instrumentation.enums.MetricType;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.List;
+import static com.example.notificationservice.utils.Constants.*;
 
 @Service
+@AllArgsConstructor
 public class ThirdPartyService {
 
+        private RestTemplate restTemplate;
+
+        @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=Third Party SMS API")
         public ResponseEntity<ThirdPartyResponseBody> sendSMS(Long messageId, String phoneNumber, String message) {
 
                 SMSObject smsObject = new SMSObject(message);
@@ -27,21 +35,12 @@ public class ThirdPartyService {
                                 List.of(destinationObject)
                 );
 
-                String url = "https://api.imiconnect.in/resources/v1/messaging";
-
-                RestTemplate restTemplate = new RestTemplate();
-
-                String API_KEY = "c0c49ebf-ca44-11e9-9e4e-025282c394f2";
-
                 HttpHeaders headers = new HttpHeaders();
 
                 headers.set("Key", API_KEY);
 
                 HttpEntity<ThirdPartyRequest> request = new HttpEntity<>(thirdPartyRequest, headers);
 
-                ResponseEntity<ThirdPartyResponseBody> response= restTemplate.exchange(url, HttpMethod.POST, request, ThirdPartyResponseBody.class);
-
-                return response;
-
+                return restTemplate.exchange(API_URL, HttpMethod.POST, request, ThirdPartyResponseBody.class);
         }
 }

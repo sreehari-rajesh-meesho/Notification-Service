@@ -29,7 +29,7 @@ public class Message {
     private Integer status;
     private String failure_code;
     private String failure_comments;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
