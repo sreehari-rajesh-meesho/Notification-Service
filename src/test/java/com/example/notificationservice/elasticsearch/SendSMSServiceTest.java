@@ -1,7 +1,6 @@
 package com.example.notificationservice.elasticsearch;
 
 import com.example.notificationservice.message.Message;
-import org.apache.kafka.common.network.Send;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
