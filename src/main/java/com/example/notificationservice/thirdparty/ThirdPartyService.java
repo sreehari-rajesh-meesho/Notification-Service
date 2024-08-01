@@ -1,5 +1,6 @@
 package com.example.notificationservice.thirdparty;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,7 +11,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ThirdPartyService {
+
+        private RestTemplate restTemplate;
 
         public ResponseEntity<ThirdPartyResponseBody> sendSMS(Long messageId, String phoneNumber, String message) {
 
@@ -28,8 +32,6 @@ public class ThirdPartyService {
                 );
 
                 String url = "https://api.imiconnect.in/resources/v1/messaging";
-
-                RestTemplate restTemplate = new RestTemplate();
 
                 String API_KEY = "c0c49ebf-ca44-11e9-9e4e-025282c394f2";
 
