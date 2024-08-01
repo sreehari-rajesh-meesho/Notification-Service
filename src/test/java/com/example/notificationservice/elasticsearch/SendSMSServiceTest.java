@@ -1,6 +1,7 @@
 package com.example.notificationservice.elasticsearch;
 
 import com.example.notificationservice.message.Message;
+import org.apache.kafka.common.network.Send;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,8 +45,18 @@ public class SendSMSServiceTest {
 
         @Test
         public void TestSaveMessage() {
-                Mockito.when(sendSMSDetailsRepository.save(new SendSMSDetails())).thenReturn(new SendSMSDetails());
-                sendSMSService.saveMessage(new Message());
+
+                Mockito.when(sendSMSDetailsRepository.save(Mockito.<SendSMSDetails>any())).thenReturn(new SendSMSDetails());
+                sendSMSService.saveMessage(new Message(
+                        1L,
+                        "+919447466672",
+                        "Hello World",
+                        0,
+                        "test code",
+                        "test message",
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusSeconds(10)
+                ));
                 assertTrue(true);
         }
 
