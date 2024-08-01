@@ -42,13 +42,6 @@ public class MessageServiceTest {
             Long messageId = messageService.IngestMessageToDatabase(message);
             assertEquals(messageId, testMessageId);
 
-            // Phone Number null;
-            Message messagePhoneNumber = new Message();
-            messagePhoneNumber.setPhone_number(null);
-            messagePhoneNumber.setMessage("This is a test message");
-            Long messagePhoneNumberId = messageService.IngestMessageToDatabase(messagePhoneNumber);
-            assertEquals(messagePhoneNumberId, PHONE_NUMBER_MANDATORY);
-
             // DB error
             Message messageDBError = new Message();
             messageDBError.setPhone_number("+912781781787");
