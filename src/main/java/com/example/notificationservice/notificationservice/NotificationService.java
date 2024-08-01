@@ -9,6 +9,7 @@ import com.example.notificationservice.redis.BlackListedNumber;
 import com.example.notificationservice.redis.BlackListedNumberService;
 import com.example.notificationservice.thirdparty.ThirdPartyResponseBody;
 import com.example.notificationservice.thirdparty.ThirdPartyService;
+import com.example.notificationservice.utils.PhoneNumberValidation;
 import com.example.notificationservice.utils.RequestNumberList;
 import lombok.AllArgsConstructor;
 
@@ -27,19 +28,20 @@ import static com.example.notificationservice.utils.Constants.*;
 @AllArgsConstructor
 public class NotificationService {
 
-        public SendSMSService sendSMSService;
+        private SendSMSService sendSMSService;
         private MessageService messageService;
         private BlackListedNumberService blackListedNumberService;
         private KafkaProducer kafkaProducer;
         private ThirdPartyService thirdPartyService;
+        private PhoneNumberValidation phoneNumberValidation;
 
         public Long MessageIngestionPhase(Message message) {
 
-                Long messageId = messageService.IngestMessageToDatabase(message);
-
-                if(messageId == PHONE_NUMBER_MANDATORY) {
-                    return PHONE_NUMBER_MANDATORY;
+                if(phoneNumberValidation.isValidPhoneNumber(message.getPhone_number()) != 0L){
+                        return phoneNumberValidation.isValidPhoneNumber(message.getPhone_number());
                 }
+
+                Long messageId = messageService.IngestMessageToDatabase(message);
 
                 if(messageId == DATABASE_ERROR) {
                     return DATABASE_ERROR;

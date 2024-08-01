@@ -20,12 +20,6 @@ public class MessageService {
         @DigestLogger(metricType = MetricType.RDS, tagSet = "api=SQL")
         public Long IngestMessageToDatabase(Message message) {
 
-                String phoneNumber = message.getPhone_number();
-
-                if(phoneNumber == null) {
-                        return PHONE_NUMBER_MANDATORY;
-                }
-
                 message.setCreatedAt(LocalDateTime.now());
 
                 try {
