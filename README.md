@@ -76,8 +76,7 @@ public class SendSMSDetails {
 
 # Program Design
 
-![Notification-Service.svg](https://prod-files-secure.s3.us-west-2.amazonaws.com/1c5b5c09-7e21-4e1e-b175-54be95187652/2b0c68e5-88a1-49e2-96de-65482be4d030/Notification-Service.svg)
-
+<img src="Notification-Service.svg">
 # Request Response Structures
 
 **SMS Request Structure**
