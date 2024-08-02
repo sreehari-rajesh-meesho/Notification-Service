@@ -37,8 +37,8 @@ public class NotificationService {
 
         public Long MessageIngestionPhase(Message message) {
 
-                if(phoneNumberValidation.isValidPhoneNumber(message.getPhone_number()) != 0L){
-                        return phoneNumberValidation.isValidPhoneNumber(message.getPhone_number());
+                if(phoneNumberValidation.isValidPhoneNumber(message.getPhoneNumber()) != 0L){
+                        return phoneNumberValidation.isValidPhoneNumber(message.getPhoneNumber());
                 }
 
                 Long messageId = messageService.IngestMessageToDatabase(message);
@@ -63,7 +63,7 @@ public class NotificationService {
 
                 if(message.isPresent()) {
 
-                    String phoneNumber = message.get().getPhone_number();
+                    String phoneNumber = message.get().getPhoneNumber();
                     String messageText = message.get().getMessage();
 
                     if(blackListedNumberService.checkIfBlackListedNumber(new BlackListedNumber(phoneNumber))) {

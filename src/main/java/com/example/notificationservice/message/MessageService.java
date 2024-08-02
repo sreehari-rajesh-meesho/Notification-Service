@@ -43,8 +43,8 @@ public class MessageService {
 
                         if(message.isPresent()) {
                                 message.get().setStatus(status);
-                                message.get().setFailure_code(failure_code);
-                                message.get().setFailure_comments(failure_comments);
+                                message.get().setFailureCode(failure_code);
+                                message.get().setFailureComments(failure_comments);
                                 message.get().setUpdatedAt(LocalDateTime.now());
                                 return messageRepository.save(message.get()).getId();
                         }

@@ -23,11 +23,11 @@ public class SendSMSService {
     public void saveMessage(Message message) {
 
         SendSMSDetails sendSMSDetails = new SendSMSDetails();
-        sendSMSDetails.setPhone_number(message.getPhone_number());
+        sendSMSDetails.setPhoneNumber(message.getPhoneNumber());
         sendSMSDetails.setMessage(message.getMessage());
         sendSMSDetails.setStatus(message.getStatus());
-        sendSMSDetails.setFailure_code(message.getFailure_code());
-        sendSMSDetails.setFailure_comments(message.getFailure_comments());
+        sendSMSDetails.setFailureCode(message.getFailureCode());
+        sendSMSDetails.setFailureComments(message.getFailureComments());
         sendSMSDetails.setCreated(message.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli());
         sendSMSDetails.setUpdated(message.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli());
         sendSMSDetailsRepository.save(sendSMSDetails);

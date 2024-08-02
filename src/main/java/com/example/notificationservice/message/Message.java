@@ -24,11 +24,11 @@ public class Message {
             generator = "message_sequence"
     )
     private Long id;
-    private String phone_number;
+    private String phoneNumber;
     private String message;
     private Integer status;
-    private String failure_code;
-    private String failure_comments;
+    private String failureCode;
+    private String failureComments;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

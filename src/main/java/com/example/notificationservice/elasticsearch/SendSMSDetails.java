@@ -19,7 +19,7 @@ public class SendSMSDetails {
     private String id;
 
     @Field(type = FieldType.Text, name = "phone_number")
-    private String phone_number;
+    private String phoneNumber;
 
     @Field(type = FieldType.Text, name = "message")
     private String message;
@@ -28,10 +28,10 @@ public class SendSMSDetails {
     private Integer status;
 
     @Field(type = FieldType.Text, name = "failure_code")
-    private String failure_code;
+    private String failureCode;
 
     @Field(type = FieldType.Text, name="failure_comments")
-    private String failure_comments;
+    private String failureComments;
 
     @Field(type=FieldType.Date, name="created_at")
     private Long created;
