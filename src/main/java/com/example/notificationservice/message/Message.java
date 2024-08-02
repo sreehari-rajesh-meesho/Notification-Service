@@ -1,10 +1,7 @@
 package com.example.notificationservice.message;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table
+@ToString
 public class Message {
 
     @Id
@@ -26,12 +24,12 @@ public class Message {
             generator = "message_sequence"
     )
     private Long id;
-    private Integer phone_number;
+    private String phone_number;
     private String message;
     private Integer status;
     private String failure_code;
     private String failure_comments;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
