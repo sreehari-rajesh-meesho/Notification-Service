@@ -77,6 +77,7 @@ public class SendSMSDetails {
 # Program Design
 
 <img src="Notification-Service.svg">
+
 # Request Response Structures
 
 **SMS Request Structure**
