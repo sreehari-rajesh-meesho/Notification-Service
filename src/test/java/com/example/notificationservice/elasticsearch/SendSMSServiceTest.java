@@ -47,16 +47,18 @@ public class SendSMSServiceTest {
         public void TestSaveMessage() {
 
                 Mockito.when(sendSMSDetailsRepository.save(Mockito.<SendSMSDetails>any())).thenReturn(new SendSMSDetails());
-                sendSMSService.saveMessage(new Message(
-                        1L,
-                        "+919447466672",
-                        "Hello World",
-                        0,
-                        "test code",
-                        "test message",
-                        LocalDateTime.now(),
-                        LocalDateTime.now().plusSeconds(10)
-                ));
+                sendSMSService.saveMessage(
+                        new Message(
+                                1L,
+                                "+919447466672",
+                                "Hello World",
+                                0,
+                                "test code",
+                                "test message",
+                                LocalDateTime.now(),
+                                LocalDateTime.now().plusSeconds(10)
+                        )
+                );
                 assertTrue(true);
         }
 

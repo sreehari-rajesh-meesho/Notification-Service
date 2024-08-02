@@ -8,8 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 public class ResponseErrorObject {
-
         private String code;
         private String message;
-
 }
