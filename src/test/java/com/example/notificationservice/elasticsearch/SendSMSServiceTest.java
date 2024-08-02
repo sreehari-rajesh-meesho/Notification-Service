@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class SendSMSServiceTest {
+
         @InjectMocks
         private SendSMSService sendSMSService;
 
@@ -94,9 +95,7 @@ public class SendSMSServiceTest {
                 ssd1.setPhone_number("+912178217872");
                 ssd1.setMessage("Hello World!!");
                 ssd1.setCreated(test_time.toInstant(ZoneOffset.UTC).toEpochMilli());
-                List<SendSMSDetails> listOfSMSDetails = List.of(
-                        ssd1
-                );
+                List<SendSMSDetails> listOfSMSDetails = List.of(ssd1);
                 Long start = start_time.toInstant(ZoneOffset.UTC).toEpochMilli();
                 Long end = end_time.toInstant(ZoneOffset.UTC).toEpochMilli();
                 int testPageNum  = 1;
