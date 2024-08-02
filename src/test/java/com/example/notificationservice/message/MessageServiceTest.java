@@ -28,14 +28,14 @@ public class MessageServiceTest {
     public void TestIngestMessageToDatabaseI() {
 
             Message message = new Message();
-            message.setPhone_number("+912781781787");
+            message.setPhoneNumber("+912781781787");
             message.setMessage("This is a test message");
 
             Long testMessageId = 10L;
 
             // Normal Insertion
             Message messageById = new Message();
-            messageById.setPhone_number("+912781781787");
+            messageById.setPhoneNumber("+912781781787");
             messageById.setMessage("This is a test message");
             messageById.setId(testMessageId);
             Mockito.when(messageRepository.save(message)).thenReturn(messageById);
@@ -44,7 +44,7 @@ public class MessageServiceTest {
 
             // DB error
             Message messageDBError = new Message();
-            messageDBError.setPhone_number("+912781781787");
+            messageDBError.setPhoneNumber("+912781781787");
             messageDBError.setMessage("This is a test message");
             Mockito.when(messageRepository.save(messageDBError)).thenThrow(new RuntimeException());
             Long messageDBErrorId = messageService.IngestMessageToDatabase(messageDBError);
@@ -55,7 +55,7 @@ public class MessageServiceTest {
     public void TestFindMessageById() {
 
             Message messageById = new Message();
-            messageById.setPhone_number("+912781781787");
+            messageById.setPhoneNumber("+912781781787");
             messageById.setMessage("This is a test message");
             Long testMessageId = 10L;
             messageById.setId(testMessageId);
@@ -74,7 +74,7 @@ public class MessageServiceTest {
     @Test
     public void UpdateMessageInDatabase() {
             Message messageToUpdate = new Message();
-            messageToUpdate.setPhone_number("+912781781787");
+            messageToUpdate.setPhoneNumber("+912781781787");
             messageToUpdate.setMessage("This is a test message");
             Long testMessageId = 10L;
             messageToUpdate.setId(testMessageId);

@@ -65,9 +65,9 @@ public class SendSMSServiceTest {
                 String sample_text = "hello";
                 SendSMSDetails ssd1 = new SendSMSDetails();
                 SendSMSDetails ssd2 = new SendSMSDetails();
-                ssd1.setPhone_number("+912167126721");
+                ssd1.setPhoneNumber("+912167126721");
                 ssd1.setMessage("Hello World!!");
-                ssd2.setPhone_number("+913121671267");
+                ssd2.setPhoneNumber("+913121671267");
                 ssd2.setMessage("Hello Meesho!!");
                 List<SendSMSDetails> listOfSMSDetails = List.of(
                         ssd1,
@@ -92,7 +92,7 @@ public class SendSMSServiceTest {
                 LocalDateTime test_time = LocalDateTime.now().plusMinutes(30);
                 LocalDateTime end_time = LocalDateTime.now().plusHours(1);
                 SendSMSDetails ssd1 = new SendSMSDetails();
-                ssd1.setPhone_number("+912178217872");
+                ssd1.setPhoneNumber("+912178217872");
                 ssd1.setMessage("Hello World!!");
                 ssd1.setCreated(test_time.toInstant(ZoneOffset.UTC).toEpochMilli());
                 List<SendSMSDetails> listOfSMSDetails = List.of(ssd1);

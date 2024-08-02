@@ -47,7 +47,7 @@ public class Controller {
     public Response<ResponseDataObject, ResponseErrorObject> sendSMS(@RequestBody SMSRequest smsRequest) {
 
         Message message = new Message();
-        message.setPhone_number(smsRequest.getPhoneNumber());
+        message.setPhoneNumber(smsRequest.getPhoneNumber());
         message.setMessage(smsRequest.getMessage());
 
         Long messageId = notificationService.MessageIngestionPhase(message);
