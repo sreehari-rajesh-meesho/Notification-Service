@@ -28,7 +28,9 @@ public class Controller {
     private static ResponseErrorObject getResponseErrorObjectFailureResponse(Long status) {
 
         ResponseErrorObject error = null;
-
+        if(status == PHONE_NUMBER_MANDATORY) {
+            error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
+        }
         if(status == INVALID_REQUEST) {
             error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
         }

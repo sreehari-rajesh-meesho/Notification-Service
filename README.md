@@ -8,8 +8,8 @@ Structure of SMS request for the SMS endpoint
 
 ```json
 {
-		"phoneNumber": "",
-		"message": ""
+  "phoneNumber": "",
+  "message": ""
 }
 ```
 
@@ -17,7 +17,7 @@ Components of Notification-Service
 
 - Notification-Service-Server (Spring Boot Application)
 - Redis Docker Container (Redis Server)
-- ElasticSearch Docker Container (Elastic Search Server)
+- ElasticSearch Docker Container (ElasticSearch Server)
 - Kafka Server
 - MySQL Server (message_db)
 
@@ -43,7 +43,7 @@ primary key (id)
 String phoneNumber(Key)
 ```
 
-**Elastic Search Object Store Class**
+**ElasticSearch Object Store Class**
 
 ```java
 public class SendSMSDetails {
