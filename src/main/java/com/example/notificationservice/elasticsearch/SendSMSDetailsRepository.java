@@ -12,5 +12,5 @@ import java.time.LocalDateTime;
 public interface SendSMSDetailsRepository extends ElasticsearchRepository<SendSMSDetails, String> {
         Page<SendSMSDetails> findAll(Pageable pageable);
         Page<SendSMSDetails> findSendSMSDetailsByCreatedBetween(Long start, Long end, Pageable pageable);
-        Page<SendSMSDetails> findSendSMSDetailsByMessageIsContaining(String text, Pageable pageable);
+        Page<SendSMSDetails> findSendSMSDetailsByMessageContaining(String text, Pageable pageable);
 }
