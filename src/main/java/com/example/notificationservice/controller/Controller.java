@@ -29,7 +29,7 @@ public class Controller {
 
         ResponseErrorObject error = null;
         if(status == PHONE_NUMBER_MANDATORY) {
-            error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
+            error = new ResponseErrorObject("INVALID_REQUEST", "Phone Number Mandatory");
         }
         if(status == INVALID_REQUEST) {
             error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
