@@ -3,11 +3,15 @@ package com.example.notificationservice.elasticsearch;
 import com.example.notificationservice.message.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +25,6 @@ public class SendSMSService {
     }
 
     public void saveMessage(Message message) {
-
         SendSMSDetails sendSMSDetails = new SendSMSDetails();
         sendSMSDetails.setPhoneNumber(message.getPhoneNumber());
         sendSMSDetails.setMessage(message.getMessage());
@@ -35,11 +38,23 @@ public class SendSMSService {
 
     public Page<SendSMSDetails> findSMSContainingText(String text, int page, int size) {
             PageRequest pageable = PageRequest.of(page, size);
-            return sendSMSDetailsRepository.findSendSMSDetailsByMessageContaining(text, pageable);
+            String[] SpaceSeparatedStrings = text.split(" ");
+            String regex = "*";
+            for (int i = 0; i < SpaceSeparatedStrings.length-1; i++) {
+                    regex = regex + SpaceSeparatedStrings[i] + "\s";
+            }
+            regex = regex + SpaceSeparatedStrings[SpaceSeparatedStrings.length-1] + "*";
+            List<SendSMSDetails> smsDetailsList = sendSMSDetailsRepository.findSendSMSDetailsByMessageMatchesRegex(regex, pageable);
+            List<SendSMSDetails> smsDetailsMatchesRegex = new ArrayList<>();
+            for(SendSMSDetails smsDetails : smsDetailsList) {
+                if(Pattern.matches(".*" + text + ".*", smsDetails.getMessage())) {
+                    smsDetailsMatchesRegex.add(smsDetails);
+                }
+            }
+            return new PageImpl<>(smsDetailsMatchesRegex, pageable, smsDetailsList.size());
     }
 
     public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {
-
             PageRequest pageable = PageRequest.of(page, size);
             Long start = startTime.toInstant(ZoneOffset.UTC).toEpochMilli();
             Long end = endTime.toInstant(ZoneOffset.UTC).toEpochMilli();
