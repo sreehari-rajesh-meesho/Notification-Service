@@ -14,5 +14,4 @@ import java.util.List;
 public interface SendSMSDetailsRepository extends ElasticsearchRepository<SendSMSDetails, String> {
         Page<SendSMSDetails> findAll(Pageable pageable);
         Page<SendSMSDetails> findSendSMSDetailsByCreatedBetween(Long start, Long end, Pageable pageable);
-        List<SendSMSDetails> findSendSMSDetailsByMessageMatchesRegex(String regex, Pageable pageable);
 }

@@ -38,13 +38,7 @@ public class SendSMSService {
 
     public Page<SendSMSDetails> findSMSContainingText(String text, int page, int size) {
             PageRequest pageable = PageRequest.of(page, size);
-            String[] SpaceSeparatedStrings = text.split(" ");
-            String regex = "*";
-            for (int i = 0; i < SpaceSeparatedStrings.length-1; i++) {
-                    regex = regex + SpaceSeparatedStrings[i] + "\s";
-            }
-            regex = regex + SpaceSeparatedStrings[SpaceSeparatedStrings.length-1] + "*";
-            List<SendSMSDetails> smsDetailsList = sendSMSDetailsRepository.findSendSMSDetailsByMessageMatchesRegex(regex, pageable);
+            List<SendSMSDetails>smsDetailsList = sendSMSDetailsRepository.findAll(pageable).getContent();
             List<SendSMSDetails> smsDetailsMatchesRegex = new ArrayList<>();
             for(SendSMSDetails smsDetails : smsDetailsList) {
                 if(Pattern.matches(".*" + text + ".*", smsDetails.getMessage())) {
