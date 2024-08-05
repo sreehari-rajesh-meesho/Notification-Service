@@ -76,7 +76,7 @@ public class SendSMSDetails {
 
 # System Design
 
-<img src="SystemDesign.png>
+<img src="SystemDesign.jpg">
 
 # Program Design
 
