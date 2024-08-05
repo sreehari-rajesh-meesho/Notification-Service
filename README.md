@@ -74,6 +74,10 @@ public class SendSMSDetails {
 }
 ```
 
+# System Design
+
+<img src="SystemDesign.png>
+
 # Program Design
 
 <img src="Notification-Service.svg">
