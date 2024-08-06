@@ -10,6 +10,8 @@ import com.meesho.instrumentation.annotation.DigestLogger;
 import com.meesho.instrumentation.enums.MetricType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -44,7 +46,7 @@ public class Controller {
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/sms/send")
     @PostMapping(path = "sms/send")
-    public Response<ResponseDataObject, ResponseErrorObject> sendSMS(@RequestBody SMSRequest smsRequest) {
+    public ResponseEntity<Response<ResponseDataObject, ResponseErrorObject>> sendSMS(@RequestBody SMSRequest smsRequest) {
 
         Message message = new Message();
         message.setPhoneNumber(smsRequest.getPhoneNumber());
@@ -55,48 +57,56 @@ public class Controller {
 
         if(messageId < 0) {
             response.setError(getResponseErrorObjectFailureResponse(messageId));
-            return response;
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
         response.setData(data);
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/blacklist")
     @PostMapping(path = "blacklist")
-    public Response<String, String> blackListNumber(@RequestBody RequestNumberList phoneNumbers) {
+    public ResponseEntity<Response<String, String>> blackListNumber(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.BlackListNumbers(phoneNumbers);
-        Response<String, String> successResponse = new Response<>();
-        successResponse.setData("Successfully Blacklisted");
-        return successResponse;
+        Response<String, String> response = new Response<>();
+        if(status == REDIS_ERROR) {
+            response.setError("Redis Error");
+            return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+        }
+        response.setData("Successfully Blacklisted");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/blacklist")
     @DeleteMapping(path = "blacklist")
-    public Response<String, String> deleteFromBlackList(@RequestBody RequestNumberList phoneNumbers) {
+    public ResponseEntity<Response<String, String>> deleteFromBlackList(@RequestBody RequestNumberList phoneNumbers) {
         Long status = notificationService.WhiteListNumbers(phoneNumbers);
-        Response<String, String> successResponse = new Response<>();
-        successResponse.setData("Successfully Whitelisted");
-        return successResponse;
+        Response<String, String> response = new Response<>();
+        if(status == REDIS_ERROR){
+            response.setError("Redis Error");
+            return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+        }
+        response.setData("Successfully Whitelisted");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/sms")
     @GetMapping(path = "sms/{request_id}")
-    public Response<Message, ResponseErrorObject> getSMSById(@PathVariable("request_id") Long requestId) {
+    public ResponseEntity<Response<Message, ResponseErrorObject>> getSMSById(@PathVariable("request_id") Long requestId) {
 
         Response<Message, ResponseErrorObject> response = new Response<>();
         Optional<Message> msgById = notificationService.getMessageById(requestId);
 
         if(msgById.isPresent()) {
             response.setData(msgById.get());
-            return response;
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         ResponseErrorObject errorObject = getResponseErrorObjectFailureResponse(INVALID_REQUEST);
         response.setError(errorObject);
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/contains")

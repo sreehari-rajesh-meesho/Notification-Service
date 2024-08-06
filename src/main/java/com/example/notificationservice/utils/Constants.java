@@ -8,6 +8,7 @@ public class Constants {
 
     public static final long DATABASE_ERROR = -1;
     // Failure Codes
+    public static final long REDIS_ERROR = -6;
     public static final long PHONE_NUMBER_MANDATORY = -2;
     public static final long MESSAGE_WITH_ID_NOT_FOUND = -3;
     public static final long INVALID_REQUEST = -5;

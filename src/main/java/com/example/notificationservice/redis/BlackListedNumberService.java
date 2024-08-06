@@ -18,6 +18,11 @@ public class BlackListedNumberService {
     }
 
     @DigestLogger(metricType = MetricType.REDIS, tagSet = "api=REDIS")
+    public void saveBlackListedNumberList(Iterable<BlackListedNumber> blackList) {
+        blackListedNumberRepository.saveAll(blackList);
+    }
+
+    @DigestLogger(metricType = MetricType.REDIS, tagSet = "api=REDIS")
     public Boolean checkIfBlackListedNumber(BlackListedNumber blackListedNumber) {
         Optional<BlackListedNumber>blNum = blackListedNumberRepository.findById(blackListedNumber.getPhoneNumber());
         return blNum.isPresent();
@@ -26,6 +31,11 @@ public class BlackListedNumberService {
     @DigestLogger(metricType = MetricType.REDIS, tagSet = "api=REDIS")
     public void deleteBlackListedNumber(BlackListedNumber blackListedNumber) {
         blackListedNumberRepository.delete(blackListedNumber);
+    }
+
+    @DigestLogger(metricType = MetricType.REDIS, tagSet = "api=REDIS")
+    public void deleteAllBlackListedNumbers(Iterable<BlackListedNumber> blackListedNumbers) {
+        blackListedNumberRepository.deleteAll(blackListedNumbers);
     }
 }
 

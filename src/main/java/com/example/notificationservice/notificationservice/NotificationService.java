@@ -6,6 +6,7 @@ import com.example.notificationservice.kafka.KafkaProducer;
 import com.example.notificationservice.message.Message;
 import com.example.notificationservice.message.MessageService;
 import com.example.notificationservice.redis.BlackListedNumber;
+import com.example.notificationservice.redis.BlackListedNumberRepository;
 import com.example.notificationservice.redis.BlackListedNumberService;
 import com.example.notificationservice.thirdparty.ThirdPartyResponseBody;
 import com.example.notificationservice.thirdparty.ThirdPartyService;
@@ -19,6 +20,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ import static com.example.notificationservice.utils.Constants.*;
 @AllArgsConstructor
 public class NotificationService {
 
+        private final BlackListedNumberRepository blackListedNumberRepository;
         private SendSMSService sendSMSService;
         private MessageService messageService;
         private BlackListedNumberService blackListedNumberService;
@@ -104,28 +107,33 @@ public class NotificationService {
         }
 
         public Long BlackListNumbers(RequestNumberList requestNumberList) {
-
-                List<String> phoneNumberList = requestNumberList.getPhoneNumbers();
-
-                for(String phoneNumber : phoneNumberList) {
+                List<BlackListedNumber> blNumList = new ArrayList<>();
+                for(String phoneNumber : requestNumberList.getPhoneNumbers()) {
                         BlackListedNumber blNum = new BlackListedNumber(phoneNumber);
-                        blackListedNumberService.saveBlackListedNumber(blNum);
+                        blNumList.add(blNum);
                 }
-
-                return BLACKLISTED_SUCCESSFULLY;
+                try{
+                        blackListedNumberService.saveBlackListedNumberList(blNumList);
+                        return BLACKLISTED_SUCCESSFULLY;
+                } catch(Exception e){
+                        return REDIS_ERROR;
+                }
         }
 
         public Long WhiteListNumbers(RequestNumberList requestNumberList) {
 
-                List<String> phoneNumberList = requestNumberList.getPhoneNumbers();
-
-                for(String phoneNumber : phoneNumberList) {
-                    BlackListedNumber blNum = new BlackListedNumber(phoneNumber);
-                    blackListedNumberService.deleteBlackListedNumber(blNum);
+                List<BlackListedNumber> wlNumList = new ArrayList<>();
+                for(String phoneNumber : requestNumberList.getPhoneNumbers()) {
+                        BlackListedNumber blNum = new BlackListedNumber(phoneNumber);
+                        wlNumList.add(blNum);
                 }
-
-                return WHITELISTED_SUCCESSFULLY;
-        }
+                try{
+                        blackListedNumberService.deleteAllBlackListedNumbers(wlNumList);
+                        return WHITELISTED_SUCCESSFULLY;
+                } catch(Exception e){
+                        return REDIS_ERROR;
+                }
+       }
 
         public Optional<Message> getMessageById(Long messageId) {
                 return messageService.findMessageById(messageId);
