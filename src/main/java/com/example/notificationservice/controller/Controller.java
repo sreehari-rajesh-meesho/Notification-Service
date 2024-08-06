@@ -26,12 +26,11 @@ public class Controller {
     private NotificationService notificationService;
 
     private static ResponseErrorObject getResponseErrorObjectFailureResponse(Long status) {
-
         ResponseErrorObject error = null;
         if(status == PHONE_NUMBER_MANDATORY) {
             error = new ResponseErrorObject("INVALID_REQUEST", "Phone Number Mandatory");
         }
-        if(status == INVALID_REQUEST) {
+        else if(status == INVALID_REQUEST) {
             error = new ResponseErrorObject("INVALID_REQUEST", "Invalid request");
         }
         else if(status == DATABASE_ERROR) {
@@ -40,7 +39,6 @@ public class Controller {
         else if(status == MESSAGE_WITH_ID_NOT_FOUND) {
             error = new ResponseErrorObject("REQUEST_FAILED", "Message With Id Not Found");
         }
-
         return error;
     }
 
