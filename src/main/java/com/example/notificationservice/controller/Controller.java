@@ -9,7 +9,6 @@ import com.example.notificationservice.utils.*;
 import com.meesho.instrumentation.annotation.DigestLogger;
 import com.meesho.instrumentation.enums.MetricType;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -111,20 +110,35 @@ public class Controller {
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/contains")
     @GetMapping(path = "contains/{page}/{size}")
-    public Page<SendSMSDetails> getSMSDetailsContaining(@PathVariable Integer page, @PathVariable Integer size, @RequestParam String text) {
-        return notificationService.getSendSMSDetailsContainingText(page, size, text);
+    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsContaining(@PathVariable Integer page, @PathVariable Integer size, @RequestParam String text) {
+        PageResponse<SendSMSDetails> response = notificationService.getSendSMSDetailsContainingText(page, size, text);
+        if(response.getError() == null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/between")
     @GetMapping(path = "between/{page}/{size}")
-    public Page<SendSMSDetails> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
-        return notificationService.getSendSMSDetailsBetween(page, size, from, to);
+    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
+        PageResponse<SendSMSDetails> response = notificationService.getSendSMSDetailsBetween(page, size, from, to);
+        if(response.getError() == null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/all")
     @GetMapping(path = "all/{page}/{size}")
-    public Page<SendSMSDetails> getAllSMSDetails(@PathVariable int page, @PathVariable int size) {
-        return notificationService.getAllSMSDetails(page, size);
+    public ResponseEntity<PageResponse<SendSMSDetails>> getAllSMSDetails(@PathVariable int page, @PathVariable int size) {
+        PageResponse<SendSMSDetails> response = notificationService.getAllSMSDetails(page, size);
+        if(response.getError() == null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

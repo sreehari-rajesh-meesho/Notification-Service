@@ -10,6 +10,7 @@ import com.example.notificationservice.redis.BlackListedNumberRepository;
 import com.example.notificationservice.redis.BlackListedNumberService;
 import com.example.notificationservice.thirdparty.ThirdPartyResponseBody;
 import com.example.notificationservice.thirdparty.ThirdPartyService;
+import com.example.notificationservice.utils.PageResponse;
 import com.example.notificationservice.utils.PhoneNumberValidation;
 import com.example.notificationservice.utils.RequestNumberList;
 import lombok.AllArgsConstructor;
@@ -139,15 +140,30 @@ public class NotificationService {
                 return messageService.findMessageById(messageId);
         }
 
-        public Page<SendSMSDetails> getSendSMSDetailsContainingText(Integer page, Integer size, String text) {
-                return sendSMSService.findSMSContainingText(text, page, size);
+        public PageResponse<SendSMSDetails> getSendSMSDetailsContainingText(Integer page, Integer size, String text) {
+                try{
+                        Page<SendSMSDetails> smsDetailsPage = sendSMSService.findSMSContainingText(text, page, size);
+                        return new PageResponse<>(null, smsDetailsPage);
+                } catch (Exception e) {
+                        return new PageResponse<>("Elastic Search Error", null);
+                }
         }
 
-        public Page<SendSMSDetails> getSendSMSDetailsBetween(Integer page, Integer size, LocalDateTime from, LocalDateTime to) {
-                return sendSMSService.findSMSBetween(from, to, page, size);
+        public PageResponse<SendSMSDetails> getSendSMSDetailsBetween(Integer page, Integer size, LocalDateTime from, LocalDateTime to) {
+                try{
+                        Page<SendSMSDetails> smsDetailsPage = sendSMSService.findSMSBetween(from, to, page, size);
+                        return new PageResponse<>(null, smsDetailsPage);
+                } catch (Exception e) {
+                        return new PageResponse<>("Elastic Search Error", null);
+                }
         }
 
-        public Page<SendSMSDetails> getAllSMSDetails(Integer page, Integer size) {
-                return sendSMSService.findByPage(page, size);
+        public PageResponse<SendSMSDetails> getAllSMSDetails(Integer page, Integer size) {
+                try{
+                        Page<SendSMSDetails> smsDetailsPage = sendSMSService.findByPage(page, size);
+                        return new PageResponse<>(null, smsDetailsPage);
+                } catch (Exception e) {
+                        return new PageResponse<>("Elastic Search Error", null);
+                }
         }
 }
