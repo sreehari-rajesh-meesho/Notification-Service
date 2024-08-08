@@ -51,10 +51,10 @@ public class SendSMSService {
             return new PageImpl<>(smsDetailsMatchesRegex.subList(start, end), pageable, smsDetailsMatchesRegex.size());
     }
 
-    public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {
+    public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, String phoneNumber, int page, int size) {
             PageRequest pageable = PageRequest.of(page, size);
             Long start = startTime.toInstant(ZoneOffset.UTC).toEpochMilli();
             Long end = endTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-            return sendSMSDetailsRepository.findSendSMSDetailsByCreatedBetween(start, end, pageable);
+            return sendSMSDetailsRepository.findSendSMSDetailsByCreatedBetweenAndPhoneNumber(start, end, phoneNumber, pageable);
     }
 }

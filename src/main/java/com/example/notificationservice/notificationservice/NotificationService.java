@@ -84,11 +84,17 @@ public class NotificationService {
 
                             int status = response.getStatusCode().value();
 
-                            ThirdPartyResponseBody thirdPartyResponseBody = response.getBody();
-                            String failure_code = thirdPartyResponseBody.getResponse().getCode();
-                            String failure_message = thirdPartyResponseBody.getResponse().getDescription();
-
-                            UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            if(status != 200) {
+                                    String failure_code = "SEND_SMS_FAILED";
+                                    String failure_message = "Third Party Request Failed";
+                                    UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            }
+                            else{
+                                    ThirdPartyResponseBody thirdPartyResponseBody = response.getBody();
+                                    String failure_code = thirdPartyResponseBody.getResponse().getCode();
+                                    String failure_message = thirdPartyResponseBody.getResponse().getDescription();
+                                    UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            }
                     }
                 } else {
                         Integer status = Math.toIntExact(MESSAGE_WITH_ID_NOT_FOUND);
@@ -149,9 +155,9 @@ public class NotificationService {
                 }
         }
 
-        public PageResponse<SendSMSDetails> getSendSMSDetailsBetween(Integer page, Integer size, LocalDateTime from, LocalDateTime to) {
+        public PageResponse<SendSMSDetails> getSendSMSDetailsBetween(Integer page, Integer size, LocalDateTime from, LocalDateTime to, String phoneNumber) {
                 try{
-                        Page<SendSMSDetails> smsDetailsPage = sendSMSService.findSMSBetween(from, to, page, size);
+                        Page<SendSMSDetails> smsDetailsPage = sendSMSService.findSMSBetween(from, to, phoneNumber, page, size);
                         return new PageResponse<>(null, smsDetailsPage);
                 } catch (Exception e) {
                         return new PageResponse<>("Elastic Search Error", null);

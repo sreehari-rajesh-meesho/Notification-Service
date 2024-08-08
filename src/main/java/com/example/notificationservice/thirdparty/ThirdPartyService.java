@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import static com.example.notificationservice.utils.Constants.*;
@@ -40,7 +41,11 @@ public class ThirdPartyService {
                 headers.set("Key", API_KEY);
 
                 HttpEntity<ThirdPartyRequest> request = new HttpEntity<>(thirdPartyRequest, headers);
-
-                return restTemplate.exchange(API_URL, HttpMethod.POST, request, ThirdPartyResponseBody.class);
+                ResponseEntity<ThirdPartyResponseBody> response;
+                try {
+                        return restTemplate.exchange(API_URL, HttpMethod.POST, request, ThirdPartyResponseBody.class);
+                } catch (HttpStatusCodeException e) {
+                        return ResponseEntity.status(e.getStatusCode()).body(null);
+                }
         }
 }

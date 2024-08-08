@@ -1,20 +1,14 @@
 package com.example.notificationservice.thirdparty;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-import static com.example.notificationservice.utils.Constants.API_KEY;
-import static com.example.notificationservice.utils.Constants.API_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 

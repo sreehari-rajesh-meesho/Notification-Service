@@ -121,8 +121,8 @@ public class Controller {
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/between")
     @GetMapping(path = "between/{page}/{size}")
-    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
-        PageResponse<SendSMSDetails> response = notificationService.getSendSMSDetailsBetween(page, size, from, to);
+    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size,@RequestParam String phoneNumber, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
+        PageResponse<SendSMSDetails> response = notificationService.getSendSMSDetailsBetween(page, size,from, to, phoneNumber);
         if(response.getError() == null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {

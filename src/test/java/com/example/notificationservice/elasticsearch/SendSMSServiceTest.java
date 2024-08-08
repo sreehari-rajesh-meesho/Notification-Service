@@ -102,13 +102,13 @@ public class SendSMSServiceTest {
                 List<SendSMSDetails> listOfSMSDetails = List.of(ssd1);
                 Long start = start_time.toInstant(ZoneOffset.UTC).toEpochMilli();
                 Long end = end_time.toInstant(ZoneOffset.UTC).toEpochMilli();
-                int testPageNum  = 1;
+                int testPageNum  = 0;
                 int testPageSize  = 1;
                 Pageable pageable = PageRequest.of(testPageNum, testPageSize);
                 Page<SendSMSDetails> smsDetailsPage = new PageImpl<>(listOfSMSDetails, pageable, listOfSMSDetails.size());
                 Mockito.when(sendSMSDetailsRepository.findSendSMSDetailsByCreatedBetween(start, end, pageable)).thenReturn(smsDetailsPage);
                 Page<SendSMSDetails> smsDetails = sendSMSService.findSMSBetween(start_time, end_time, testPageNum, testPageSize);
-                for(SendSMSDetails ssd: smsDetailsPage) {
+                for(SendSMSDetails ssd: smsDetails) {
                         assertTrue(ssd.getCreated() > start && ssd.getCreated() < end);
                 }
         }
