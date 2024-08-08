@@ -45,7 +45,10 @@ public class SendSMSService {
                     smsDetailsMatchesRegex.add(smsDetails);
                 }
             }
-            return new PageImpl<>(smsDetailsMatchesRegex, pageable, smsDetailsList.size());
+            int start = (int) pageable.getOffset();
+            int end = Math.min(start+ pageable.getPageSize(), smsDetailsMatchesRegex.size());
+            System.out.println(new PageImpl<>(smsDetailsMatchesRegex.subList(start, end), pageable, smsDetailsMatchesRegex.size()));
+            return new PageImpl<>(smsDetailsMatchesRegex.subList(start, end), pageable, smsDetailsMatchesRegex.size());
     }
 
     public Page<SendSMSDetails> findSMSBetween(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {

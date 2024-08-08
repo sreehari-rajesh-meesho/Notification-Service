@@ -163,6 +163,7 @@ public class NotificationService {
                         Page<SendSMSDetails> smsDetailsPage = sendSMSService.findByPage(page, size);
                         return new PageResponse<>(null, smsDetailsPage);
                 } catch (Exception e) {
+                        System.out.println("Exception occurred "+ e);
                         return new PageResponse<>("Elastic Search Error", null);
                 }
         }

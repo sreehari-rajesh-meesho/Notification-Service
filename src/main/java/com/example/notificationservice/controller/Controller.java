@@ -72,7 +72,7 @@ public class Controller {
         Response<String, String> response = new Response<>();
         if(status == REDIS_ERROR) {
             response.setError("Redis Error");
-            return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+            return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
         }
         response.setData("Successfully Blacklisted");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -85,7 +85,7 @@ public class Controller {
         Response<String, String> response = new Response<>();
         if(status == REDIS_ERROR){
             response.setError("Redis Error");
-            return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+            return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
         }
         response.setData("Successfully Whitelisted");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -115,7 +115,7 @@ public class Controller {
         if(response.getError() == null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -126,7 +126,7 @@ public class Controller {
         if(response.getError() == null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -137,7 +137,7 @@ public class Controller {
         if(response.getError() == null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 }

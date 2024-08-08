@@ -76,11 +76,13 @@ public class SendSMSServiceTest {
                         ssd2
                 );
 
-                int testPageNum  = 1;
+                int testPageNum  = 0;
                 int testPageSize  = 1;
                 Pageable pageable = PageRequest.of(testPageNum, testPageSize);
-                Page<SendSMSDetails> smsDetailsPage = new PageImpl<>(listOfSMSDetails, pageable, listOfSMSDetails.size());
-                Mockito.when(sendSMSDetailsRepository.findAll(pageable)).thenReturn(smsDetailsPage);
+                int testStart = (int)pageable.getOffset();
+                int testEnd = Math.min(testStart + pageable.getPageSize(), listOfSMSDetails.size());
+                Page<SendSMSDetails> smsDetailsPage = new PageImpl<>(listOfSMSDetails.subList(testStart, testEnd), pageable, listOfSMSDetails.size());
+                Mockito.when(sendSMSDetailsRepository.findAll(Mockito.any(Pageable.class))).thenReturn(smsDetailsPage);
                 Page<SendSMSDetails> sendSMSDetails = sendSMSService.findSMSContainingText(sample_text, testPageNum, testPageSize);
                 // Assert text in page;
                 for(SendSMSDetails ssd: sendSMSDetails) {
