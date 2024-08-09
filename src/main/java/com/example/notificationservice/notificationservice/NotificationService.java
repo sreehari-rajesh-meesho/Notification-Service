@@ -63,20 +63,18 @@ public class NotificationService {
                 Long UpdatedMessageId = -1L;
                 Optional<Message> message = messageService.findMessageById(messageId);
 
-                System.out.println("MessageID:"+ messageId);
-
                 if(message.isPresent()) {
 
                     String phoneNumber = message.get().getPhoneNumber();
                     String messageText = message.get().getMessage();
 
                     if(blackListedNumberService.checkIfBlackListedNumber(new BlackListedNumber(phoneNumber))) {
-                            System.out.println("Phone number is blacklisted");
-                            Integer status = Math.toIntExact(NUMBER_BLACKLISTED);
+
+                            Integer status = 422;
                             String failure_code = "NUMBER_BLACKLISTED";
                             String failure_message = "The Number is BlackListed";
 
-                            messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
+                            UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
 
                     } else {
                             ResponseEntity<ThirdPartyResponseBody> response = thirdPartyService.sendSMS(messageId, phoneNumber, messageText);
@@ -86,7 +84,13 @@ public class NotificationService {
 
                             if(status != 200) {
                                     String failure_code = "SEND_SMS_FAILED";
-                                    String failure_message = "Third Party Request Failed";
+                                    String failure_message = "";
+                                    if(status == 500) {
+                                            failure_message = "Internal Server Error";
+                                    }
+                                    else {
+                                            failure_message = "Third Party Service Error";
+                                    }
                                     UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                             }
                             else{
@@ -97,13 +101,12 @@ public class NotificationService {
                             }
                     }
                 } else {
-                        Integer status = Math.toIntExact(MESSAGE_WITH_ID_NOT_FOUND);
+                        Integer status = 500;
                         String failure_code = "MESSAGE_NOT_FOUND";
                         String failure_message = "Message with ID" + messageId + " not found";
                         UpdatedMessageId = messageService.UpdateMessageInDatabase(messageId, status, failure_code, failure_message);
                 }
 
-                System.out.println("UpdatedMessageID:" + UpdatedMessageId);
                 Optional<Message> updatedMessage = messageService.findMessageById(UpdatedMessageId);
 
                 if(updatedMessage.isPresent()) {
@@ -168,7 +171,8 @@ public class NotificationService {
                 try{
                         Page<SendSMSDetails> smsDetailsPage = sendSMSService.findByPage(page, size);
                         return new PageResponse<>(null, smsDetailsPage);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                         System.out.println("Exception occurred "+ e);
                         return new PageResponse<>("Elastic Search Error", null);
                 }

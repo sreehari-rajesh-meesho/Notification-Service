@@ -43,11 +43,11 @@ public class SendSMSService {
             for(SendSMSDetails smsDetails : smsDetailsList) {
                 if(Pattern.matches(".*" + text + ".*", smsDetails.getMessage())) {
                     smsDetailsMatchesRegex.add(smsDetails);
+                    System.out.println("sms Details:"+smsDetails.toString());
                 }
             }
             int start = (int) pageable.getOffset();
             int end = Math.min(start+ pageable.getPageSize(), smsDetailsMatchesRegex.size());
-            System.out.println(new PageImpl<>(smsDetailsMatchesRegex.subList(start, end), pageable, smsDetailsMatchesRegex.size()));
             return new PageImpl<>(smsDetailsMatchesRegex.subList(start, end), pageable, smsDetailsMatchesRegex.size());
     }
 

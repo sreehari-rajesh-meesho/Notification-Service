@@ -50,7 +50,7 @@ public class Controller {
         Message message = new Message();
         message.setPhoneNumber(smsRequest.getPhoneNumber());
         message.setMessage(smsRequest.getMessage());
-
+        message.setStatus(102);
         Long messageId = notificationService.MessageIngestionPhase(message);
         Response<ResponseDataObject, ResponseErrorObject> response = new Response<>();
 
@@ -61,7 +61,7 @@ public class Controller {
 
         ResponseDataObject data = new ResponseDataObject(messageId, "Pending");
         response.setData(data);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
 
@@ -121,7 +121,16 @@ public class Controller {
 
     @DigestLogger(metricType = MetricType.HTTP, tagSet = "api=v1/between")
     @GetMapping(path = "between/{page}/{size}")
-    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size,@RequestParam String phoneNumber, @RequestParam LocalDateTime from, @RequestParam LocalDateTime to) {
+    public ResponseEntity<PageResponse<SendSMSDetails>> getSMSDetailsBetween(@PathVariable Integer page, @PathVariable Integer size,@RequestParam(required = true) String phoneNumber, @RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to) {
+
+        if(from==null) {
+            from = LocalDateTime.parse("1970-01-01T00:00:00");
+        }
+
+        if(to==null) {
+            to = LocalDateTime.now();
+        }
+
         PageResponse<SendSMSDetails> response = notificationService.getSendSMSDetailsBetween(page, size,from, to, phoneNumber);
         if(response.getError() == null) {
             return new ResponseEntity<>(response, HttpStatus.OK);

@@ -44,8 +44,12 @@ public class ThirdPartyService {
                 ResponseEntity<ThirdPartyResponseBody> response;
                 try {
                         return restTemplate.exchange(API_URL, HttpMethod.POST, request, ThirdPartyResponseBody.class);
-                } catch (HttpStatusCodeException e) {
+                }
+                catch (HttpStatusCodeException e) {
                         return ResponseEntity.status(e.getStatusCode()).body(null);
+                }
+                catch (Exception e) {
+                        return ResponseEntity.status(500).body(null);
                 }
         }
 }
